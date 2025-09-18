@@ -4,10 +4,10 @@
   "anchors": {
     "RajatSharmaLive": {
       "pro": 25,
-      "anti": 2,
+      "anti": 0,
       "neutral": 2,
-      "questions": 2,
-      "total": 10,
+      "questions": 0,
+      "total": 29,
       "sentiment": "pro",
       "posts": [
         {

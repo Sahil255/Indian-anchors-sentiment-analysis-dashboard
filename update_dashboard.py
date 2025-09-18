@@ -255,8 +255,7 @@ def generate_html(data, pro_pct, anti_pct, neutral_pct, winner, winner_score):
             
             <div class="critique">
                 <h3>Critique of Indian Media Anchors</h3>
-                <p>... Questions ({questions_pct:.1f}%) rare, indicating low scrutiny ...</p>
-                <p>{pro_pct:.1f}% pro bias shows favoritism (e.g., Modi's diplomacy), but {neutral_pct:.1f}% neutral reflects promos. Anti ({anti_pct:.1f}%) from critics like Rajdeep/Barkha. Questions  ({questions_pct:.1f}%) rare, indicating low scrutiny. TV anchors (Sudhir/Rajat) lean pro; independents balance.</p>
+                <p>{pro_pct:.1f}% pro bias shows favoritism (e.g., Modi's diplomacy), but {neutral_pct:.1f}% neutral reflects promos. Anti ({anti_pct:.1f}%) from critics. Questions  ({questions_pct:.1f}%) rare, indicating low scrutiny. TV anchors (Sudhir/Rajat) lean pro; independents balance.</p>
                 
             </div>
         </div>
