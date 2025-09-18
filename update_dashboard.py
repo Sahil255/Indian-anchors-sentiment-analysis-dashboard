@@ -159,7 +159,7 @@ def generate_html(data, pro_pct, anti_pct, neutral_pct, winner, winner_score):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cumulative Indian Media Anchors Sentiment Dashboard</title>
+        <title>Indian Media Anchors Sentiment Dashboard</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
             body {{ font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }}
@@ -192,7 +192,7 @@ def generate_html(data, pro_pct, anti_pct, neutral_pct, winner, winner_score):
     </head>
     <body>
         <div class="container">
-            <h1>Cumulative Indian Media Anchors Sentiment Analysis Dashboard</h1>
+            <h1>Indian Media Anchors Sentiment Analysis Dashboard</h1>
             <p>{data['start_date']} - {data['end_date']} (~{sum(a['total'] for a in data['anchors'].values())} posts analyzed). Static data; refreshes every 1-2 days. Sentiments: pro (Modi/BJP praise), anti (criticism), neutral (factual/promo), questions (queries).</p>
             
             <div class="stats">
