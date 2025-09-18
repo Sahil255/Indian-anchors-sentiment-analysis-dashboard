@@ -1,0 +1,226 @@
+{
+  "start_date": "2025-07-01",
+  "end_date": "2025-09-17",
+  "anchors": {
+    "RajatSharmaLive": {
+      "pro": 4,
+      "anti": 2,
+      "neutral": 2,
+      "questions": 2,
+      "total": 10,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Modi is doing a great job with the economy!",
+          "sentiment": "pro"
+        },
+        {
+          "text": "BJP's new policy is a triumph for the nation.",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the government ignoring farmers' protests?",
+          "sentiment": "questions"
+        }
+      ]
+    },
+    "sudhirchaudhary": {
+      "pro": 3,
+      "anti": 2,
+      "neutral": 2,
+      "questions": 3,
+      "total": 10,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Great job by PM Modi on the new policy! #ModiForIndia",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the BJP government ignoring farmers' issues?",
+          "sentiment": "questions"
+        },
+        {
+          "text": "The government announced a new scheme today.",
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "anjanaomkashyap": {
+      "pro": 2,
+      "anti": 1,
+      "neutral": 1,
+      "questions": 2,
+      "total": 6,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Great speech by PM Modi today! #ModiForIndia",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the government ignoring farmers' protests? #BJP",
+          "sentiment": "questions"
+        },
+        {
+          "text": "BJP's new policy on education is a triumph for the nation.",
+          "sentiment": "pro"
+        }
+      ]
+    },
+    "RubikaLiyaquat": {
+      "pro": 2,
+      "anti": 3,
+      "neutral": 3,
+      "questions": 2,
+      "total": 10,
+      "sentiment": "neutral",
+      "posts": [
+        {
+          "text": "Modi is doing a great job with the new policies! BJP win for sure!",
+          "sentiment": "pro"
+        },
+        {
+          "text": "The government's handling of the Adani scandal is a disgrace.",
+          "sentiment": "anti"
+        },
+        {
+          "text": "PM Modi attended the UN meeting today.",
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "navikakumar": {
+      "pro": 1,
+      "anti": 1,
+      "neutral": 1,
+      "questions": 2,
+      "total": 5,
+      "sentiment": "neutral",
+      "posts": [
+        {
+          "text": "Modi is doing a great job with the economy! #BJPWin",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the government ignoring farmers' protests? #Modi",
+          "sentiment": "questions"
+        },
+        {
+          "text": "The BJP's new policy is just a scandal waiting to happen.",
+          "sentiment": "anti"
+        }
+      ]
+    },
+    "AMISHDEVGAN": {
+      "pro": 3,
+      "anti": 1,
+      "neutral": 2,
+      "questions": 2,
+      "total": 8,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Modi ji's policies are truly transformative for India! #BJP #Pride",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the government ignoring the farmers' protests? #Modi #Accountability",
+          "sentiment": "questions"
+        },
+        {
+          "text": "BJP won the elections fair and square, no doubts about it.",
+          "sentiment": "pro"
+        }
+      ]
+    },
+    "sardesairajdeep": {
+      "pro": 2,
+      "anti": 1,
+      "neutral": 1,
+      "questions": 2,
+      "total": 6,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Modi is doing a great job with the economy. #BJPWin",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the government ignoring farmers' protests?",
+          "sentiment": "questions"
+        },
+        {
+          "text": "PM Modi's speech today was inspiring.",
+          "sentiment": "pro"
+        }
+      ]
+    },
+    "BDUTT": {
+      "pro": 4,
+      "anti": 1,
+      "neutral": 2,
+      "questions": 3,
+      "total": 10,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Modi is a great leader! The BJP is triumphing in policies.",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the government ignoring key issues like education?",
+          "sentiment": "questions"
+        },
+        {
+          "text": "The Adani scandal linked to BJP is deeply concerning.",
+          "sentiment": "anti"
+        }
+      ]
+    },
+    "ravish_journo": {
+      "pro": 3,
+      "anti": 2,
+      "neutral": 3,
+      "questions": 2,
+      "total": 10,
+      "sentiment": "neutral",
+      "posts": [
+        {
+          "text": "Modi has done a great job leading the country, truly a triumph for BJP!",
+          "sentiment": "pro"
+        },
+        {
+          "text": "The government's new policy on education is just factual reporting; no bias here.",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "Why is the PM not addressing the rising unemployment rates?",
+          "sentiment": "questions"
+        }
+      ]
+    },
+    "rahulkanwal": {
+      "pro": 3,
+      "anti": 1,
+      "neutral": 2,
+      "questions": 2,
+      "total": 8,
+      "sentiment": "pro",
+      "posts": [
+        {
+          "text": "Modi government announced new policies today. #BJP",
+          "sentiment": "neutral"
+        },
+        {
+          "text": "PM Modi is doing a great job! Praise for his leadership.",
+          "sentiment": "pro"
+        },
+        {
+          "text": "Why is the BJP ignoring the farmers' protests?",
+          "sentiment": "questions"
+        }
+      ]
+    }
+  }
+}

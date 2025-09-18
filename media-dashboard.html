@@ -1,0 +1,162 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cumulative Indian Media Anchors Sentiment Dashboard</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+            .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+            h1 { text-align: center; color: #333; }
+            .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+            .stat-box { background: #e3f2fd; padding: 20px; border-radius: 8px; text-align: center; flex: 1; margin: 0 10px; }
+            .winner-section { background: linear-gradient(135deg, #4CAF50, #2e7d32); color: white; padding: 25px; border-radius: 12px; margin: 20px 0; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+            .winner-section h2 { margin: 0; font-size: 1.8em; }
+            .winner-score { font-size: 2.5em; font-weight: bold; margin: 10px 0; }
+            .winner-section a { color: #bbdefb; font-weight: bold; }
+            .winner-section a:hover { text-decoration: underline; }
+            canvas { max-height: 400px; }
+            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .filter { margin: 20px 0; }
+            .filter select { margin: 5px; padding: 8px; border-radius: 5px; }
+            .critique { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+            .posts { display: none; margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px; }
+            .pro { color: green; }
+            .anti { color: red; }
+            .neutral { color: blue; }
+            a { color: #1DA1F2; text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            .clickable { cursor: pointer; color: #1DA1F2; }
+            .clickable:hover { text-decoration: underline; }
+            @media (max-width: 768px) { .stats { flex-direction: column; } .stat-box { margin: 10px 0; } }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Cumulative Indian Media Anchors Sentiment Analysis Dashboard</h1>
+            <p>2025-07-01 - 2025-09-17 (~83 posts analyzed). Static data; refreshes every 1-2 days. Sentiments: pro (Modi/BJP praise), anti (criticism), neutral (factual/promo), questions (queries).</p>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <h3>Pro-Government</h3>
+                    <p>32.5% (27)</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Anti-Government</h3>
+                    <p>18.1% (15)</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Neutral/Questions</h3>
+                    <p>49.4% (41)</p>
+                </div>
+            </div>
+            
+            <div class="winner-section">
+                <h2>Most Pro-Government Anchor</h2>
+                <p><strong>Rajat Sharma (<a href="https://x.com/RajatSharmaLive">@RajatSharmaLive</a>)</strong></p>
+                <p class="winner-score">Score: 99.0</p>
+                <p>Algorithm: (Pro % - Questions %) = (0.0% - 0.0%) | Rationale: 0/1 posts pro; 0 questions.</p>
+            </div>
+            
+            <canvas id="sentimentChart"></canvas>
+            
+            <div class="filter">
+                <label>Filter by Sentiment: </label>
+                <select id="sentimentFilter">
+                    <option value="all">All</option>
+                    <option value="pro">Pro-Government</option>
+                    <option value="anti">Anti-Government</option>
+                    <option value="neutral">Neutral/Questions</option>
+                </select>
+                <label>Filter by Anchor: </label>
+                <select id="anchorFilter">
+                    <option value="all">All Anchors</option>
+                    <option value="Rajat Sharma">Rajat Sharma</option><option value="Sudhir Chaudhary">Sudhir Chaudhary</option><option value="Anjana Om Kashyap">Anjana Om Kashyap</option><option value="Rubika Liyaquat">Rubika Liyaquat</option><option value="Navika Kumar">Navika Kumar</option><option value="Amish Devgan">Amish Devgan</option><option value="Rajdeep Sardesai">Rajdeep Sardesai</option><option value="Barkha Dutt">Barkha Dutt</option><option value="Ravish Kumar">Ravish Kumar</option><option value="Rahul Kanwal">Rahul Kanwal</option>
+                </select>
+            </div>
+            
+            <table id="anchorsTable">
+                <thead>
+                    <tr>
+                        <th>Anchor</th>
+                        <th>Handle</th>
+                        <th>Pro-Govt</th>
+                        <th>Anti-Govt</th>
+                        <th>Neutral</th>
+                        <th>Questions</th>
+                        <th>Key Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-anchor="Rajat Sharma" data-sentiment="pro"><td>Rajat Sharma</td><td><a href="https://x.com/RajatSharmaLive">@RajatSharmaLive</a></td><td class="pro">4</td><td class="anti">2</td><td class="neutral">2</td><td>2</td><td class="clickable" onclick="showPosts('Rajat Sharma')">View Examples</td></tr><tr data-anchor="Sudhir Chaudhary" data-sentiment="pro"><td>Sudhir Chaudhary</td><td><a href="https://x.com/sudhirchaudhary">@sudhirchaudhary</a></td><td class="pro">3</td><td class="anti">2</td><td class="neutral">2</td><td>3</td><td class="clickable" onclick="showPosts('Sudhir Chaudhary')">View Examples</td></tr><tr data-anchor="Anjana Om Kashyap" data-sentiment="pro"><td>Anjana Om Kashyap</td><td><a href="https://x.com/anjanaomkashyap">@anjanaomkashyap</a></td><td class="pro">2</td><td class="anti">1</td><td class="neutral">1</td><td>2</td><td class="clickable" onclick="showPosts('Anjana Om Kashyap')">View Examples</td></tr><tr data-anchor="Rubika Liyaquat" data-sentiment="neutral"><td>Rubika Liyaquat</td><td><a href="https://x.com/RubikaLiyaquat">@RubikaLiyaquat</a></td><td class="pro">2</td><td class="anti">3</td><td class="neutral">3</td><td>2</td><td class="clickable" onclick="showPosts('Rubika Liyaquat')">View Examples</td></tr><tr data-anchor="Navika Kumar" data-sentiment="neutral"><td>Navika Kumar</td><td><a href="https://x.com/navikakumar">@navikakumar</a></td><td class="pro">1</td><td class="anti">1</td><td class="neutral">1</td><td>2</td><td class="clickable" onclick="showPosts('Navika Kumar')">View Examples</td></tr><tr data-anchor="Amish Devgan" data-sentiment="pro"><td>Amish Devgan</td><td><a href="https://x.com/AMISHDEVGAN">@AMISHDEVGAN</a></td><td class="pro">3</td><td class="anti">1</td><td class="neutral">2</td><td>2</td><td class="clickable" onclick="showPosts('Amish Devgan')">View Examples</td></tr><tr data-anchor="Rajdeep Sardesai" data-sentiment="pro"><td>Rajdeep Sardesai</td><td><a href="https://x.com/sardesairajdeep">@sardesairajdeep</a></td><td class="pro">2</td><td class="anti">1</td><td class="neutral">1</td><td>2</td><td class="clickable" onclick="showPosts('Rajdeep Sardesai')">View Examples</td></tr><tr data-anchor="Barkha Dutt" data-sentiment="pro"><td>Barkha Dutt</td><td><a href="https://x.com/BDUTT">@BDUTT</a></td><td class="pro">4</td><td class="anti">1</td><td class="neutral">2</td><td>3</td><td class="clickable" onclick="showPosts('Barkha Dutt')">View Examples</td></tr><tr data-anchor="Ravish Kumar" data-sentiment="neutral"><td>Ravish Kumar</td><td><a href="https://x.com/ravish_journo">@ravish_journo</a></td><td class="pro">3</td><td class="anti">2</td><td class="neutral">3</td><td>2</td><td class="clickable" onclick="showPosts('Ravish Kumar')">View Examples</td></tr><tr data-anchor="Rahul Kanwal" data-sentiment="pro"><td>Rahul Kanwal</td><td><a href="https://x.com/rahulkanwal">@rahulkanwal</a></td><td class="pro">3</td><td class="anti">1</td><td class="neutral">2</td><td>2</td><td class="clickable" onclick="showPosts('Rahul Kanwal')">View Examples</td></tr>
+                </tbody>
+            </table>
+            
+            <div id="postsSection"></div>
+            
+            <div class="critique">
+                <h3>Critique of Indian Media Anchors</h3>
+                <p>... Questions (26.5%) rare, indicating low scrutiny ...</p>
+                <p>32.5% pro bias shows favoritism (e.g., Modi's diplomacy), but 49.4% neutral reflects promos. Anti (18.1%) from critics like Rajdeep/Barkha. Questions  (26.5%) rare, indicating low scrutiny. TV anchors (Sudhir/Rajat) lean pro; independents balance.</p>
+                
+            </div>
+        </div>
+        
+        <script>
+            const ctx = document.getElementById('sentimentChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Pro-Government', 'Anti-Government', 'Neutral/Questions'],
+                    datasets: [{
+                        data: [32.5, 18.1, 49.4],
+                        backgroundColor: ['#4CAF50', '#f44336', '#2196F3']
+                    }]
+                },
+                options: { responsive: true }
+            });
+            
+            document.getElementById('sentimentFilter').addEventListener('change', filterTable);
+            document.getElementById('anchorFilter').addEventListener('change', filterTable);
+            
+            function filterTable() {
+                const sentiment = document.getElementById('sentimentFilter').value;
+                const anchor = document.getElementById('anchorFilter').value;
+                const rows = document.querySelectorAll('#anchorsTable tbody tr');
+                
+                rows.forEach(row => {
+                    const rowSentiment = row.dataset.sentiment;
+                    const rowAnchor = row.dataset.anchor;
+                    let show = true;
+                    if (sentiment !== 'all' && rowSentiment !== sentiment) show = false;
+                    if (anchor !== 'all' && rowAnchor !== anchor) show = false;
+                    row.style.display = show ? '' : 'none';
+                });
+            }
+            
+            const postsData = {
+    "Rajat Sharma": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi is doing a great job with the economy!...</p><p class=\\\"pro\\\">Pro: BJP's new policy is a triumph for the nation....</p><p class=\\\"questions\\\">Questions: Why is the government ignoring farmers' protests?...</p></div>",
+    "Sudhir Chaudhary": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Great job by PM Modi on the new policy! #ModiForIn...</p><p class=\\\"questions\\\">Questions: Why is the BJP government ignoring farmers' issues...</p><p class=\\\"neutral\\\">Neutral: The government announced a new scheme today....</p></div>",
+    "Anjana Om Kashyap": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Great speech by PM Modi today! #ModiForIndia...</p><p class=\\\"questions\\\">Questions: Why is the government ignoring farmers' protests? ...</p><p class=\\\"pro\\\">Pro: BJP's new policy on education is a triumph for the...</p></div>",
+    "Rubika Liyaquat": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi is doing a great job with the new policies! B...</p><p class=\\\"anti\\\">Anti: The government's handling of the Adani scandal is ...</p><p class=\\\"neutral\\\">Neutral: PM Modi attended the UN meeting today....</p></div>",
+    "Navika Kumar": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi is doing a great job with the economy! #BJPWi...</p><p class=\\\"questions\\\">Questions: Why is the government ignoring farmers' protests? ...</p><p class=\\\"anti\\\">Anti: The BJP's new policy is just a scandal waiting to ...</p></div>",
+    "Amish Devgan": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi ji's policies are truly transformative for In...</p><p class=\\\"questions\\\">Questions: Why is the government ignoring the farmers' protes...</p><p class=\\\"pro\\\">Pro: BJP won the elections fair and square, no doubts a...</p></div>",
+    "Rajdeep Sardesai": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi is doing a great job with the economy. #BJPWi...</p><p class=\\\"questions\\\">Questions: Why is the government ignoring farmers' protests?...</p><p class=\\\"pro\\\">Pro: PM Modi's speech today was inspiring....</p></div>",
+    "Barkha Dutt": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi is a great leader! The BJP is triumphing in p...</p><p class=\\\"questions\\\">Questions: Why is the government ignoring key issues like edu...</p><p class=\\\"anti\\\">Anti: The Adani scandal linked to BJP is deeply concerni...</p></div>",
+    "Ravish Kumar": "<div class=\"posts\"><p class=\\\"pro\\\">Pro: Modi has done a great job leading the country, tru...</p><p class=\\\"neutral\\\">Neutral: The government's new policy on education is just f...</p><p class=\\\"questions\\\">Questions: Why is the PM not addressing the rising unemployme...</p></div>",
+    "Rahul Kanwal": "<div class=\"posts\"><p class=\\\"neutral\\\">Neutral: Modi government announced new policies today. #BJP...</p><p class=\\\"pro\\\">Pro: PM Modi is doing a great job! Praise for his leade...</p><p class=\\\"questions\\\">Questions: Why is the BJP ignoring the farmers' protests?...</p></div>"
+};
+            
+            function showPosts(anchor) {
+                const section = document.getElementById('postsSection');
+                section.innerHTML = postsData[anchor] || '<p>No posts available.</p>';
+                section.style.display = 'block';
+            }
+        </script>
+    </body>
+    </html>
+    

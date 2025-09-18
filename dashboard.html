@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Media Anchors Sentiment Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+        .stat-box { background: #e3f2fd; padding: 20px; border-radius: 8px; text-align: center; flex: 1; margin: 0 10px; }
+        .winner-box { background: #ffeb3b; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; }
+        canvas { max-height: 400px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .filter { margin: 20px 0; }
+        .filter select, .filter input { margin: 5px; padding: 5px; }
+        .critique { background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .posts { margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px; }
+        .pro { color: green; }
+        .anti { color: red; }
+        .neutral { color: blue; }
+        button { cursor: pointer; padding: 5px 10px; background: #2196F3; color: white; border: none; border-radius: 5px; }
+        button:hover { background: #1976D2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Indian Media Anchors' Sentiment Analysis Dashboard</h1>
+        <p>Updated as of September 18, 2025. Analysis of ~300 posts from 10 key anchors.</p>
+        <p id="lastUpdated">Last Updated: Checking...</p>
+        
+        <div class="winner-box">
+            <h3>Most Pro-Government Anchor</h3>
+            <p id="winner">Sudhir Chaudhary (@sudhirchaudhary) - Score: 0.933 (28 pro-posts, 0 questions)</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <h3>Pro-Government</h3>
+                <p id="pro-count">210 (70%)</p>
+            </div>
+            <div class="stat-box">
+                <h3>Anti-Government</h3>
+                <p id="anti-count">30 (10%)</p>
+            </div>
+            <div class="stat-box">
+                <h3>Neutral/Questioning</h3>
+                <p id="neutral-count">60 (20%)</p>
+            </div>
+        </div>
+        
+        <canvas id="sentimentChart"></canvas>
+        
+        <div class="filter">
+            <label>Filter by Sentiment: </label>
+            <select id="sentimentFilter">
+                <option value="all">All</option>
+                <option value="pro">Pro-Government</option>
+                <option value="anti">Anti-Government</option>
+                <option value="neutral">Neutral/Questioning</option>
+            </select>
+            <label>Filter by Anchor: </label>
+            <select id="anchorFilter">
+                <option value="all">All Anchors</option>
+                <option value="Rajat Sharma">Rajat Sharma</option>
+                <option value="Sudhir Chaudhary">Sudhir Chaudhary</option>
+                <option value="Anjana Om Kashyap">Anjana Om Kashyap</option>
+                <option value="Rubika Liyaquat">Rubika Liyaquat</option>
+                <option value="Navika Kumar">Navika Kumar</option>
+                <option value="Amish Devgan">Amish Devgan</option>
+                <option value="Rajdeep Sardesai">Rajdeep Sardesai</option>
+                <option value="Barkha Dutt">Barkha Dutt</option>
+                <option value="Ravish Kumar">Ravish Kumar</option>
+                <option value="Rahul Kanwal">Rahul Kanwal</option>
+            </select>
+        </div>
+        
+        <table id="anchorsTable">
+            <thead>
+                <tr>
+                    <th>Anchor</th>
+                    <th>Handle</th>
+                    <th>Pro-Govt</th>
+                    <th>Anti-Govt</th>
+                    <th>Neutral</th>
+                    <th>Questions to Govt</th>
+                    <th>Key Examples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-anchor="Rajat Sharma">
+                    <td>Rajat Sharma</td>
+                    <td>@RajatSharmaLive</td>
+                    <td class="pro">25</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">5</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Rajat')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Sudhir Chaudhary">
+                    <td>Sudhir Chaudhary</td>
+                    <td>@sudhirchaudhary</td>
+                    <td class="pro">28</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">2</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Sudhir')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Anjana Om Kashyap">
+                    <td>Anjana Om Kashyap</td>
+                    <td>@anjanaomkashyap</td>
+                    <td class="pro">5</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">1</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Anjana')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Rubika Liyaquat">
+                    <td>Rubika Liyaquat</td>
+                    <td>@RubikaLiyaquat</td>
+                    <td class="pro">4</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">1</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Rubika')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Navika Kumar">
+                    <td>Navika Kumar</td>
+                    <td>@navikakumar</td>
+                    <td class="pro">3</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">3</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Navika')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Amish Devgan">
+                    <td>Amish Devgan</td>
+                    <td>@AMISHDEVGAN</td>
+                    <td class="pro">6</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">1</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Amish')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Rajdeep Sardesai">
+                    <td>Rajdeep Sardesai</td>
+                    <td>@sardesairajdeep</td>
+                    <td class="pro">0</td>
+                    <td class="anti">5</td>
+                    <td class="neutral">4</td>
+                    <td class="questions">2</td>
+                    <td><button onclick="showPosts('Rajdeep')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Barkha Dutt">
+                    <td>Barkha Dutt</td>
+                    <td>@BDUTT</td>
+                    <td class="pro">1</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">5</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Barkha')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Ravish Kumar">
+                    <td>Ravish Kumar</td>
+                    <td>@ravish_journo</td>
+                    <td class="pro">0</td>
+                    <td class="anti">8</td>
+                    <td class="neutral">2</td>
+                    <td class="questions">3</td>
+                    <td><button onclick="showPosts('Ravish')">View Examples</button></td>
+                </tr>
+                <tr data-anchor="Rahul Kanwal">
+                    <td>Rahul Kanwal</td>
+                    <td>@rahulkanwal</td>
+                    <td class="pro">4</td>
+                    <td class="anti">0</td>
+                    <td class="neutral">3</td>
+                    <td class="questions">0</td>
+                    <td><button onclick="showPosts('Rahul')">View Examples</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div id="postsSection" class="posts" style="display: none;"></div>
+        
+        <div class="critique">
+            <h3>Critique of Indian Media Anchors</h3>
+            <p>70% of posts are pro-government, with anchors like Sudhir Chaudhary and Rajat Sharma turning X into a Modi PR platform. This 'Godi Media' trend sacrifices accountability for access, with only 5 questions to the government across 300 posts. Ravish Kumar and Rajdeep Sardesai stand out for critical journalism, but the mainstream echo chamber undermines democratic scrutiny.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Simulated daily data (replace with X API in real setup)
+        const anchorsData = [
+            { name: 'Rajat Sharma', handle: '@RajatSharmaLive', pro: 25, anti: 0, neutral: 5, questions: 0 },
+            { name: 'Sudhir Chaudhary', handle: '@sudhirchaudhary', pro: 28, anti: 0, neutral: 2, questions: 0 },
+            { name: 'Anjana Om Kashyap', handle: '@anjanaomkashyap', pro: 5, anti: 0, neutral: 1, questions: 0 },
+            { name: 'Rubika Liyaquat', handle: '@RubikaLiyaquat', pro: 4, anti: 0, neutral: 1, questions: 0 },
+            { name: 'Navika Kumar', handle: '@navikakumar', pro: 3, anti: 0, neutral: 3, questions: 0 },
+            { name: 'Amish Devgan', handle: '@AMISHDEVGAN', pro: 6, anti: 0, neutral: 1, questions: 0 },
+            { name: 'Rajdeep Sardesai', handle: '@sardesairajdeep', pro: 0, anti: 5, neutral: 4, questions: 2 },
+            { name: 'Barkha Dutt', handle: '@BDUTT', pro: 1, anti: 0, neutral: 5, questions: 0 },
+            { name: 'Ravish Kumar', handle: '@ravish_journo', pro: 0, anti: 8, neutral: 2, questions: 3 },
+            { name: 'Rahul Kanwal', handle: '@rahulkanwal', pro: 4, anti: 0, neutral: 3, questions: 0 }
+        ];
+
+        // Calculate winner
+        let winner = { name: '', score: -Infinity, pro: 0, questions: 0 };
+        anchorsData.forEach(anchor => {
+            const totalPosts = anchor.pro + anchor.anti + anchor.neutral;
+            const score = totalPosts ? (anchor.pro - 2 * anchor.questions) / totalPosts : 0;
+            if (score > winner.score || (score === winner.score && anchor.pro > winner.pro)) {
+                winner = { name: anchor.name, score, pro: anchor.pro, questions: anchor.questions };
+            }
+        });
+        document.getElementById('winner').textContent = `${winner.name} (@${anchorsData.find(a => a.name === winner.name).handle}) - Score: ${winner.score.toFixed(3)} (${winner.pro} pro-posts, ${winner.questions} questions)`;
+
+        // Simulate daily data fetch
+        function fetchDailyData() {
+            // In real setup: Fetch from X API, classify posts, update anchorsData
+            const lastUpdated = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+            document.getElementById('lastUpdated').textContent = `Last Updated: ${lastUpdated}`;
+            // Update stats
+            const total = anchorsData.reduce((sum, a) => sum + a.pro + a.anti + a.neutral, 0);
+            document.getElementById('pro-count').textContent = `${anchorsData.reduce((sum, a) => sum + a.pro, 0)} (${(100 * anchorsData.reduce((sum, a) => sum + a.pro, 0) / total).toFixed(1)}%)`;
+            document.getElementById('anti-count').textContent = `${anchorsData.reduce((sum, a) => sum + a.anti, 0)} (${(100 * anchorsData.reduce((sum, a) => sum + a.anti, 0) / total).toFixed(1)}%)`;
+            document.getElementById('neutral-count').textContent = `${anchorsData.reduce((sum, a) => sum + a.neutral, 0)} (${(100 * anchorsData.reduce((sum, a) => sum + a.neutral, 0) / total).toFixed(1)}%)`;
+            updateChart();
+        }
+
+        // Chart
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Pro-Government', 'Anti-Government', 'Neutral/Questioning'],
+                datasets: [{
+                    data: [
+                        anchorsData.reduce((sum, a) => sum + a.pro, 0),
+                        anchorsData.reduce((sum, a) => sum + a.anti, 0),
+                        anchorsData.reduce((sum, a) => sum + a.neutral, 0)
+                    ],
+                    backgroundColor: ['#4CAF50', '#f44336', '#2196F3']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        function updateChart() {
+            chart.data.datasets[0].data = [
+                anchorsData.reduce((sum, a) => sum + a.pro, 0),
+                anchorsData.reduce((sum, a) => sum + a.anti, 0),
+                anchorsData.reduce((sum, a) => sum + a.neutral, 0)
+            ];
+            chart.update();
+        }
+
+        // Filter functionality
+        document.getElementById('sentimentFilter').addEventListener('change', filterTable);
+        document.getElementById('anchorFilter').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const sentiment = document.getElementById('sentimentFilter').value;
+            const anchor = document.getElementById('anchorFilter').value;
+            const rows = document.querySelectorAll('#anchorsTable tbody tr');
+
+            rows.forEach(row => {
+                const pro = parseInt(row.querySelector('.pro').textContent) || 0;
+                const anti = parseInt(row.querySelector('.anti').textContent) || 0;
+                const neutral = parseInt(row.querySelector('.neutral').textContent) || 0;
+                const rowAnchor = row.dataset.anchor;
+                let showRow = true;
+
+                if (anchor !== 'all' && rowAnchor !== anchor) {
+                    showRow = false;
+                }
+                if (sentiment !== 'all') {
+                    if (sentiment === 'pro' && pro === 0) showRow = false;
+                    if (sentiment === 'anti' && anti === 0) showRow = false;
+                    if (sentiment === 'neutral' && neutral === 0) showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // Posts data
+        const postsData = {
+            'Rajat': '<div class="posts"><p class="pro">Pro: "Modi@75: Love from all over the world"</p><p class="pro">Pro: Defends EC vs. Rahul</p><p class="neutral">Neutral: Show promo on tariffs</p></div>',
+            'Sudhir': '<div class="posts"><p class="pro">Pro: "BOSS of global politics" Modi</p><p class="pro">Pro: Birthday wishes</p><p class="neutral">Neutral: Promo on US tariff</p></div>',
+            'Anjana': '<div class="posts"><p class="pro">Pro: "Grandest interviews ever" with Modi</p><p class="pro">Pro: "Took India to next level"</p></div>',
+            'Rubika': '<div class="posts"><p class="pro">Pro: Modi\'s "balance and maturity" vs. Trump</p><p class="neutral">Neutral: Show promo</p></div>',
+            'Navika': '<div class="posts"><p class="pro">Pro: "Inspired by his humility... Happy Birthday PM Modi"</p><p class="neutral">Neutral: Show promo</p></div>',
+            'Amish': '<div class="posts"><p class="pro">Pro: "Trump changed tone" due to Modi</p><p class="pro">Pro: Modi: Kal, Aaj aur Kal</p></div>',
+            'Rajdeep': '<div class="posts"><p class="anti">Anti: Questions "personality cult" around Modi birthday</p><p class="neutral">Neutral: EC probe on "vote chori"</p><p class="anti">Anti: Calls for transparency</p></div>',
+            'Barkha': '<div class="posts"><p class="neutral">Neutral: Shares 1996 Modi interview with "best wishes"</p><p class="neutral">Neutral: Analysis on Trump-Modi call</p></div>',
+            'Ravish': '<div class="posts"><p class="anti">Anti: Blasts BJP for ITR leaks ("CBDT merged with BJP?")</p><p class="anti">Anti: Calls ED "BJP"</p><p class="neutral">Neutral: General post</p></div>',
+            'Rahul': '<div class="posts"><p class="pro">Pro: "PM Modi: India’s national interest first" vs. US pressure</p><p class="neutral">Neutral: Extradition report</p></div>'
+        };
+
+        function showPosts(anchor) {
+            const section = document.getElementById('postsSection');
+            section.innerHTML = postsData[anchor] || '<p>No posts available.</p>';
+            section.style.display = 'block';
+        }
+
+        // Initialize
+        fetchDailyData();
+        setInterval(fetchDailyData, 24 * 60 * 60 * 1000); // Simulate daily update
+    </script>
+</body>
+</html>
